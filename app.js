@@ -45,31 +45,35 @@ const countries = ['mexico', 'canada', 'brazil', 'argentina', 'germany', 'france
 
 //I placed all the funcions inside this app function
 function App() { 
-  const randomCountry = countries[Math.floor(Math.random() * countries.length)] 
-  const [word, setWord] = React.useState(shuffle(randomCountry)) 
+  const [word, setWord] = React.useState('') 
   const [inputValue, setInputValue] = React.useState('')
-  const [correctAnswer, setCorrectAnswer] = React.useState(randomCountry) 
+  const [correctAnswer, setCorrectAnswer] = React.useState('') 
   const [strikes, setStrikes] = React.useState(parseInt(localStorage.getItem('strikes')) || 0)
   const [points, setPoints] = React.useState(parseInt(localStorage.getItem('points')) || 0)
   const [countriesLeft, setCountriesLeft] =  React.useState(JSON.parse(localStorage.getItem('countriesLeft')) || [...countries])  
   const [gameOver, setGameOver] = React.useState(false)
-  const [passes, setPasses] = React.useState(localStorage.getItem('passes') || 3) 
+  const [passes, setPasses] = React.useState(parseInt(localStorage.getItem('passes')) || 3) 
   const [message, setMessage] = React.useState('') 
 
+  React.useEffect(() => {
+    getNextCountry()
+  }, [])
 
 //function to submit and check if its correct or not
   function submitHandler(e) {
     e.preventDefault()
     if (inputValue.toLowerCase() === correctAnswer) {
       setMessage('Correct.Next Word')
-      setPoints(parseInt(points) + 1)
-      localStorage.setItem('points', points + 1)
+      const newPoints = points + 1
+      setPoints(newPoints)
+      localStorage.setItem('points', newPoints)
       getNextCountry() 
     } else {
       setMessage(`Wrong. Try Again`)
-      setStrikes(strikes + 1)
-      localStorage.setItem('strikes', parseInt(strikes) + 1)
-      if (parseInt(strikes) + 1 >= 3) {
+      const newStrikes = strikes + 1
+      setStrikes(newStrikes)
+      localStorage.setItem('strikes',  newStrikes)
+      if (newStrikes >= 3) {
           setGameOver(true)
           setMessage('You lost! Start again.')
     }
@@ -80,8 +84,9 @@ function App() {
   //function to make the passes
   function passHandler()  {
     if (passes > 0) {
-      setPasses(passes - 1)
-      localStorage.setItem('passes', passes - 1)
+      const newPasses = passes - 1
+      setPasses(newPasses)
+      localStorage.setItem('passes', newPasses)
       setMessage('You passed. Next word!')
       getNextCountry()
     } else {
@@ -96,11 +101,16 @@ function App() {
       if (countriesLeft.length === 0) {
         setGameOver(true)
         setMessage('Congratulations, you won!')
+        localStorage.removeItem('countriesLeft')
       } else {
     
-      const randomCountry = countriesLeft[Math.floor(Math.random() * countriesLeft.length)] 
-    setWord(shuffle(randomCountry)) 
-    setCorrectAnswer(randomCountry) 
+        const randomIndex = Math.floor(Math.random() * countriesLeft.length)
+        const randomCountry = countriesLeft[randomIndex]
+        const newCountriesLeft = countriesLeft.filter((_, index) => index !== randomIndex);
+      setCountriesLeft(newCountriesLeft)
+      localStorage.setItem('countriesLeft', JSON.stringify(newCountriesLeft))
+      setWord(shuffle(randomCountry));
+      setCorrectAnswer(randomCountry);
   }
 }
 //function to press enter and submit answer
@@ -124,10 +134,7 @@ function App() {
     setCountriesLeft([...countries])
     localStorage.setItem('countriesLeft', JSON.stringify([...countries]))
     
-    
-    const randomCountry = countries[Math.floor(Math.random() * countries.length)]
-    setWord(shuffle(randomCountry))
-    setCorrectAnswer(randomCountry)
+    getNextCountry()
   }
  
   return (
