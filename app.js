@@ -45,22 +45,16 @@ const countries = ['mexico', 'canada', 'brazil', 'argentina', 'germany', 'france
 
 //I placed all the funcions inside this app function
 function App() { 
-  const [word, setWord] = React.useState('') 
-  const [inputValue, setInputValue] = React.useState('')
-  const [correctAnswer, setCorrectAnswer] = React.useState('') 
-  const [strikes, setStrikes] = React.useState(parseInt(localStorage.getItem('strikes')) || 0)
-  const [points, setPoints] = React.useState(parseInt(localStorage.getItem('points')) || 0)
-  const [countriesLeft, setCountriesLeft] =  React.useState(JSON.parse(localStorage.getItem('countriesLeft')) || [...countries])  
-  const [gameOver, setGameOver] = React.useState(false)
-  const [passes, setPasses] = React.useState(parseInt(localStorage.getItem('passes')) || 3) 
-  const [message, setMessage] = React.useState('') 
-
-  React.useEffect(() => {
-    getNextCountry()
-  }, [])
-
+  
 //function to submit and check if its correct or not
-  function submitHandler(e) {
+const [correctAnswer, setCorrectAnswer] = React.useState('') 
+const [message, setMessage] = React.useState('') 
+const [points, setPoints] = React.useState(parseInt(localStorage.getItem('points')) || 0)
+const [strikes, setStrikes] = React.useState(parseInt(localStorage.getItem('strikes')) || 0)
+const [gameOver, setGameOver] = React.useState(false)
+const [inputValue, setInputValue] = React.useState('')
+
+function submitHandler(e) {
     e.preventDefault()
     if (inputValue.toLowerCase() === correctAnswer) {
       setMessage('Correct.Next Word')
@@ -82,6 +76,8 @@ function App() {
   }
   
   //function to make the passes
+  const [passes, setPasses] = React.useState(parseInt(localStorage.getItem('passes')) || 3) 
+  
   function passHandler()  {
     if (passes > 0) {
       const newPasses = passes - 1
@@ -95,7 +91,11 @@ function App() {
   }
 
   //function to change the countries making sure it wont be repeated again once its passed or correct
-    function getNextCountry() {
+  
+  const [countriesLeft, setCountriesLeft] =  React.useState(JSON.parse(localStorage.getItem('countriesLeft')) || [...countries])  
+  const [word, setWord] = React.useState('') 
+
+  function getNextCountry() {
       
       
       if (countriesLeft.length === 0) {
@@ -120,6 +120,11 @@ function App() {
       }
 
   }
+
+  React.useEffect(() => {
+    getNextCountry()
+  }, [])
+
 //To restart the game again
   function restartGame() {
     setGameOver(false)
