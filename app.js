@@ -142,8 +142,14 @@ function submitHandler(e) {
     getNextCountry()
   }
  
+  function inputHandler (e) {
+    setInputValue(e.target.value)
+  }
+
+
   return (
-    <div>
+   <>
+   <div>
       <h1 className="heading">Welcome to Scramble!</h1>
       {gameOver ? (
         <div>
@@ -165,7 +171,7 @@ function submitHandler(e) {
           </div>
           <div >
           <form>
-            <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyPress={keyPressHandler} className="input" />
+            <input type="text" value={inputValue} onChange={inputHandler} onKeyPress={keyPressHandler} className="input" />
           </form>
           <button onClick={passHandler} className="pass">Pass ({passes} remaining)</button>
           </div>
@@ -173,6 +179,7 @@ function submitHandler(e) {
         </div>
       )}
     </div>
+    </> 
   )
 }
   
