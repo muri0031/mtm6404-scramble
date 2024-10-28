@@ -109,8 +109,8 @@ function submitHandler(e) {
         const newCountriesLeft = countriesLeft.filter((_, index) => index !== randomIndex);
       setCountriesLeft(newCountriesLeft)
       localStorage.setItem('countriesLeft', JSON.stringify(newCountriesLeft))
-      setWord(shuffle(randomCountry));
-      setCorrectAnswer(randomCountry);
+      setWord(shuffle(randomCountry))
+      setCorrectAnswer(randomCountry)
   }
 }
 //function to press enter and submit answer
