@@ -106,7 +106,7 @@ function submitHandler(e) {
     
         const randomIndex = Math.floor(Math.random() * countriesLeft.length)
         const randomCountry = countriesLeft[randomIndex]
-        const newCountriesLeft = countriesLeft.filter((_, index) => index !== randomIndex);
+        const newCountriesLeft = countriesLeft.filter((_, index) => index !== randomIndex)
       setCountriesLeft(newCountriesLeft)
       localStorage.setItem('countriesLeft', JSON.stringify(newCountriesLeft))
       setWord(shuffle(randomCountry))
